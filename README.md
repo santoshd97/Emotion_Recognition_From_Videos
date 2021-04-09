@@ -29,7 +29,20 @@ On the other hand, the training dataset which will be used for emotion detection
   <li>International Survey on Emotion Antecedents and Reactions (ISEAR)</li>
   </ul>
   
-<h2>Model</h2>
-
+<h2>Methodolgy</h2>
+<ul>
+<li>Given an audio file we first break it into 30 second frames using ffmpeg package. Each frame is then converted to text using IBM Watson speech to text API.</li>
+<li>For detecting emotions through text, we first cleaned the data (removing uppercase, stop words, punctuation, etc.) and tokenized the sentences into words. After this, we performed stemming using Porter Stemmer and vectorized the words which is required for SVM model. Finally, these vectorized words are fed to the SVM classifier for classifying the corresponding emotions.</li>
+<li>For emotion recognition from speech data, we are using Librosa library in python to extract audio features which are basically categorized into spectral (related to spectrum of audio), prosodic (stress and intonation patterns of speech) and qualitative (representing characteristics of voice). Based on theory referred from various papers, we have found that spectral features such as Mel-frequency cepstral coefficient (MFCCs), Pitch Chroma, Spectral Centroid and Spectral Skewness/Contrast, prosodic features such as Zero Crossing Rate and Root Mean Square and Energy (RMSE), and qualitative feature Mel-frequency play an important role in recognition of emotions. Using these and through experimentations, we reduced the features to hundred to be used in final training.</li>
+<li>For feature selection, we have analyzed correlation between the features and removed highly correlated features. We have also used Recursive Feature Elimination (RFE) to select top 100 most relevant features. This reduced the time to train the model and provided slightly better results in some models.</li>
+<li>For training the model, we have used Support Vector Classifier (SVC) and Random Forest to give us an idea of the accuracy. Finally, the model was trained using Convolution Neural Network with four hidden layers. The test dataset was used as validation set in the neural network. We have used Keras library for the same.</li>
+<li>The results from both text and speech models are then combined using a priority algorithm. Longer audio files are broken into bits of 5-10 seconds and for each bit, we predict emotion using text and speech. The frequencies of emotions present in both the arrays are calculated and priorities are assigned to each of them. For the final result, for each bit, emotions predicted through text and speech are weighed and if found conflicting, the emotion with higher priority is selected, otherwise, it is taken as the final emotion for that bit.</li>
+</ul>
 
 <h2>Result</h2>
+<ul>
+<li><b>Achieved 69% accuracy</b> using SVM multiclass classifier while extracting emotions from text.</li>
+<li>For the model, which was used to extract emotions from speech, the base model accuracy for SVM multiclass classifier was 44% for unscaled data and 61% for scaled data using all the features except highly correlated. For Random Forest, the highest accuracy was achieved at 71% for data with reduced features. The final training model gave us the highest accuracy of 72% using Convolution Neural Network.</li>
+  </ul>
+<p>For the final results, we used longer videos and divided into 10 seconds bits. The result from both these were combined using the priority algorithm, which produced satisfactory results.
+<p>We believe that a real time emotion detection system, using this method which we attempted can be very useful for lot of companies to analyze the responses of their customers over calls or other feedbacks.
