@@ -41,7 +41,7 @@ On the other hand, the training dataset which will be used for emotion detection
 
 <h2>Result</h2>
 <ul>
-<li><b>Achieved 69% accuracy</b> using SVM multiclass classifier while extracting emotions from text.</li>
+<li><b>Achieved 70% accuracy</b> using SVM multiclass classifier while extracting emotions from text.</li>
 <li>For the model, which was used to extract emotions from speech, the base model accuracy for SVM multiclass classifier was 44% for unscaled data and 61% for scaled data using all the features except highly correlated. For Random Forest, the highest accuracy was achieved at 71% for data with reduced features. The final training model gave us the highest accuracy of 72% using Convolution Neural Network.</li>
   </ul>
 <p>For the final results, we used longer videos and divided into 10 seconds bits. The result from both these were combined using the priority algorithm, which produced satisfactory results.
